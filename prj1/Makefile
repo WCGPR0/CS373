@@ -1,12 +1,13 @@
 CC=g++
 CFLAGS=-std=c++11
 
-all: executable
+vwu4_prj1:
 debug: CFLAGS += -DEBUG -g -Wall
 debug: executable
 
-executable:
-	$(CC) $(CFLAGS) wu_p1.cpp -o wu_p1
+%:
+	$(CC) $(CFLAGS) wu_p1.cpp -o $@
 
 clean:
 	rm wu_p1
+
