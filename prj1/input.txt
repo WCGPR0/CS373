@@ -1,0 +1,15 @@
+state	3	accept
+state	4	reject
+state	5	start
+transition	0	x	0	x	R
+transition	0	1	4	1	L
+transition	0	0	1	x	R
+transition	1	0	1	0	R
+transition	1	x	1	x	R
+transition	1	1	2	x	L
+transition	2	0	2	0	L
+transition	2	x	2	x	L
+transition	2	$	0	$	R
+transition	0	$	3	$	L
+transition	5	$	0	$	R
+transition	1	$	4	$	L
