@@ -4,8 +4,9 @@
 
 #include <iostream>
 #include <fstream>
-#include <string>
+#include <string.h>
 #include <list>
+#include <stdio.h>
 
 struct States {
 	int q, r;
@@ -81,8 +82,7 @@ int main(int argc, char* argv[]) {
 			else std::cerr << "Thre was an error with the input file: one of the transitions did not match the format" << std::endl;
 		}
 		//Part 2
-		myString = argv[2];
-		char* myChar = &myString[0];
+		myString = argv[2];	
 		int currentState = ACCEPT_STATE;
 		std::list<States*>::iterator it = myStates.begin();
 		std::string::iterator itS=myString.begin();
