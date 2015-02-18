@@ -1,7 +1,7 @@
 CC=g++
 CFLAGS=-std=c++11
 
-vwu4_prj1:
+wu_p1:
 debug: CFLAGS += -DEBUG -g -Wall
 debug: executable
 
