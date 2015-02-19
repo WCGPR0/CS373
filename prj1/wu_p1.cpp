@@ -7,6 +7,7 @@
 #include <string.h>
 #include <list>
 #include <stdio.h>
+#include <sstream>
 
 struct States {
 	int q, r;
@@ -33,53 +34,42 @@ int main(int argc, char* argv[]) {
 		myFile.open(argv[1]);
 		//Part 1
 		std::string myString;
-		//Checking for the special states
-		for (int i = 0; i < 3; i++) {
-			if (!getline(myFile, myString)) std::cerr << "Error reading line" << i << " of the file, please verify the content of the input file." << std::endl;
-			std::size_t found = myString.find("state\t");
-			if (found != std::string::npos) {
-				myString = myString.substr(found+6);
-				int x = 0;
-				while (isdigit(myString[x])) x++; //x holds the length of wanted string
-				x = stoi(myString.substr(0, ++x)); //x holds the value of the state
-				myString = myString.substr(found+x);
-				if (myString.find("start")) START_STATE = x;
-				else if (myString.find("accept")) ACCEPT_STATE = x;
-				else if (myString.find("reject")) REJECT_STATE = x;
-				//!-- Under the assumption that input file will cover all three unique states in the first three lines (basically no duplicates) --!
-			}
-			else std::cerr << "There is an error with the input file: line" << i << " doesn't have \"state\t\" in it" << std::endl;
-		}
-		//Reading up transitions
+		//Checking for the special states, working with flexibility for varying states (rather than fixed three)
+		std::stringstream ss;
 		while(std::getline(myFile, myString)) {
-			std::size_t found = myString.find("transition\t");
-			if (found != std::string::npos) {
+		ss.clear();
+		ss.str("");
+
+		ss << myString;
+			if (ss.str() == "transition") {
 				States* newState = new States();
-
-				myString = myString.substr(found+11);
-				int x = 0;
-				while (isdigit(myString[x])) x++; //x holds the length of wanted string
-				newState->q = stoi(myString.substr(0, ++x));
-				myString = myString.substr(x);
-
-				while (isdigit(myString[x])) x++; //x holds the length of wanted string
-				newState->a = stoi(myString.substr(0, ++x));
-				myString = myString.substr(x);
-
-				while (isdigit(myString[x])) x++; //x holds the length of wanted string
-				newState->r = stoi(myString.substr(0, ++x));
-				myString = myString.substr(x);
-
-				while (isdigit(myString[x])) x++; //x holds the length of wanted string
-				newState->b = stoi(myString.substr(0, ++x));
-				myString = myString.substr(x);
-
-				while (isdigit(myString[x])) x++; //x holds the length of wanted string
-				newState->x = (myString.substr(0, ++x).compare( "R")) ? States::RIGHT : States::LEFT;
-
+				ss >> newState->q;
+				ss >> newState->a;	
+				ss >> newState->r;	
+				ss >> newState->b;
+				char LR = 'L';
+				ss >> LR;
+				newState->x = (LR == 'L') ? States::LEFT : States::RIGHT;
+				
 				myStates.push_back(newState);
 			}
-			else std::cerr << "Thre was an error with the input file: one of the transitions did not match the format" << std::endl;
+			else if(myString.find("state") != std::string::npos) {
+				int x = 0;
+				std::string y = "";
+				ss >> x;
+				ss >> y;
+				if (y == "start")
+					START_STATE = x;
+				else if (y == "accept")
+					ACCEPT_STATE = x;
+				else if (y == "reject")
+					REJECT_STATE = x;
+				else
+					std::cerr << "Error in input file: Invalid state" << std::endl;
+
+			}
+			else std::cerr << "Error in input file: Neither transition nor state found." << std::endl;
+
 		}
 		//Part 2
 		myString = argv[2];	
