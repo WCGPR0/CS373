@@ -41,7 +41,6 @@ int main(int argc, char* argv[]) {
 		ss.str("");
 		ss << myString;	
 		std::getline(ss, myString, '\t');
-//std::cout << "DEBUG:\t" << ss << "\t" << myString;
 			if (myString.find("transition") != std::string::npos) {
 				States* newState = new States();
 				std::getline(ss, myString, '\t');
@@ -61,10 +60,8 @@ int main(int argc, char* argv[]) {
 			else if(myString.find("state") != std::string::npos) {
 				int x = 0;
 				std::string y = "";
-//std::cout << "DEBUG:ss:\t" << ss.str() << std::endl;		
 				ss >> x;
 				ss >> y;
-//std::cout << "DEBUGss:\t" << ss.str() << std::endl;		
 				if (y == "start")
 					START_STATE = x;
 				else if (y == "accept")
@@ -87,7 +84,6 @@ int main(int argc, char* argv[]) {
 			for (; it != myStates.end(); ++it) {
 				//Check for Start State
 				if (((*it)->q == currentState) && ((*it)->a == *itS)) {	
-std::cout << "DEBUG: Accept state found." << *it << std::endl;						
 						std::cout << (*it)->q;
 						*itS = (*it)->b;
 						if ((*it)->x == States::RIGHT) itS++;
