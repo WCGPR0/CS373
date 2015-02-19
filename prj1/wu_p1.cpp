@@ -86,7 +86,7 @@ int main(int argc, char* argv[]) {
 
 			for (; it != myStates.end(); ++it) {
 				//Check for Start State
-				if (((*it)->q == currentState) && ((*it)->q == *itS)) {	
+				if (((*it)->q == currentState) && ((*it)->a == *itS)) {	
 std::cout << "DEBUG: Accept state found." << *it << std::endl;						
 						std::cout << (*it)->q;
 						*itS = (*it)->b;
@@ -102,17 +102,18 @@ Parsing:	int loop = 1;
 
 		while (loop < 5000) {
 			for(it = myStates.begin(); it != myStates.end(); ++it) {
-				if ((*it)->q == currentState) {
-				if ((*it)->q == ACCEPT_STATE) {
-						std::cout << "\taccept" << std::endl;
-						loop = 5000;
+				if (currentState == ACCEPT_STATE) {
+					std::cout << "->" << currentState << "\taccept" << std::endl;
+					loop = 5000;
+					break;
 					}
-				else if ((*it)->q == REJECT_STATE) {
-						std::cout <<"\treject" << std::endl;
-						loop = 5000;
-					}
-				if ((*it)->a == *itS) {
-					std::cout << "->" << (*it)->q << std::endl;
+				else if (currentState == REJECT_STATE) {
+					std::cout << "->" << currentState << "\treject" << std::endl;
+					loop = 5000;
+					break;
+				}
+				if (((*it)->q == currentState) && ((*it)->a == *itS)) {
+					std::cout << "->" << (*it)->q;
 					*itS = (*it)->b;
 					if ((*it)->x == States::RIGHT) ++itS;
 					else --itS;
@@ -120,9 +121,7 @@ Parsing:	int loop = 1;
 					verify(&myString, &*itS);	
 				}
 			}
-			}
-			++loop;
-
+			++loop;	
 		}
 
 	}
