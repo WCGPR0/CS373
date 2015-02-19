@@ -40,15 +40,20 @@ int main(int argc, char* argv[]) {
 		ss.clear();
 		ss.str("");
 
-		ss << myString;
-			if (ss.str() == "transition") {
+		ss.getline(myString, 11, \t);
+			if (myString.find("transition") != std::string::npos) {
 				States* newState = new States();
-				ss >> newState->q;
-				ss >> newState->a;	
-				ss >> newState->r;	
-				ss >> newState->b;
+				ss.getline(myString, 256, '\t');
+				newState->q = atoi(myString);
+				ss.getline(myString, 2, '\t');
+				newState->a = myString[0];
+				ss.getline(myString, 256, '\t');
+				newState->r = atoi(myString);;
+				ss.getline(myString, 2, '\t');
+				newState->b = myString[0];
 				char LR = 'L';
-				ss >> LR;
+				ss.getline(myString, 2, '\t');
+				char LR = myString[0];
 				newState->x = (LR == 'L') ? States::LEFT : States::RIGHT;
 				
 				myStates.push_back(newState);
@@ -56,8 +61,10 @@ int main(int argc, char* argv[]) {
 			else if(myString.find("state") != std::string::npos) {
 				int x = 0;
 				std::string y = "";
+std::cout << "ss:\t" << ss.str() << std::endl;		
 				ss >> x;
 				ss >> y;
+std::cout << "ss:\t" << ss.str() << std::endl;		
 				if (y == "start")
 					START_STATE = x;
 				else if (y == "accept")
