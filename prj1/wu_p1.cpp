@@ -80,23 +80,23 @@ int main(int argc, char* argv[]) {
 		}
 		//Part 2
 		myString = argv[2];	
-		int currentState = ACCEPT_STATE;
+		int currentState = START_STATE;
 		std::list<States*>::iterator it = myStates.begin();
 		std::string::iterator itS=myString.begin();
 
 			for (; it != myStates.end(); ++it) {
 				//Check for Start State
-				if ((*it)->q == START_STATE) {
-						if (*itS == (*it)->a) {
-							std::cout << (*it)->q;
-							*itS = (*it)->b;
-							if ((*it)->x == States::RIGHT) itS++;
-							else itS--;
-							verify(&myString, &*itS);
-							goto Parsing;
-						}
+				if (((*it)->q == currentState) && ((*it)->q == *itS)) {	
+std::cout << "DEBUG: Accept state found." << *it << std::endl;						
+						std::cout << (*it)->q;
+						*itS = (*it)->b;
+						if ((*it)->x == States::RIGHT) itS++;
+						else itS--;
+						currentState = (*it)->r;
+						verify(&myString, &*itS);	
+						goto Parsing;
+					}
 				}
-			}
 Parsing:	int loop = 1;
 		//Under the assumption that it won't get stuck with foreign symbols out of recognizable language
 
@@ -116,7 +116,8 @@ Parsing:	int loop = 1;
 					*itS = (*it)->b;
 					if ((*it)->x == States::RIGHT) ++itS;
 					else --itS;
-					verify(&myString, &*itS);
+					currentState = (*it)->r;
+					verify(&myString, &*itS);	
 				}
 			}
 			}
